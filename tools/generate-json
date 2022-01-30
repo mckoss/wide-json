@@ -1,0 +1,19 @@
+#!/usr/bin/env node
+
+function deepMap(height=5, depth=5) {
+  const result = {};
+
+  for (let i = 1; i <= height + 1; i++) {
+    let child = {};
+    result[`cell-${i}-1`] = child;
+    for (let j = 2; j < depth - 1; j++) {
+      const grandChild = {};
+      child[`cell-${i}-${j}`] = grandChild;
+      child = grandChild;
+    }
+    child[`cell-${i}-${depth - 1}`] = `cell-${i}-${depth}`;
+  }
+  return result;
+}
+
+console.log(JSON.stringify(deepMap(), null, 2));

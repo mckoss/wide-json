@@ -1,0 +1,4 @@
+[ "this", "is a long", "array that will",
+  { "a": "complex",
+    "object": "with a very long string that will need to be wrapped" },
+  "wrap at", 80, "columns", true, "nuff" ]
