@@ -80,22 +80,47 @@ Wide-JSON:
 
 ## Rules for Compact Layout
 
-Wide-JSON will use the following rules in layout out JSON:
+Wide-JSON will use the following rules in layout out JSON
+Maps (Objects) and Arrays.
 
-- Maps (Objects) will always include the first property on the
-  same line as the opening '{'.
-- Subsequent properties will be included on the same line if they
-  will fit within the available width.
-- If a property will not fit in the available width, it will be
-  indented on a new line at the same indentation level as it's sibling
-  properties.
+- The first child (element or property) will appear
+  on the same line as the opening `{` or `[`.
+- Subsequent children will be included on the same line
+  if they will fit in the available width.
+- If a child will not fit in the available width, it will be
+  indented on a new line at the same indentation level as
+  the first child.
+- The closing `}` or `]` will always appear on the same
+  line as the last child.
 
-- Arrays will always include the first value on the same line as the
-  opening '['.
-- Subsequent values will the included on the same line if they will fit
-  in the available width.
-- Additions array values will be "word-wrapped" to subsequent lines with
-  the same indentation as the first value of the array.
+## Using the CLI
+
+Wide-JSON exports a command-line utility which reads
+a JSON file and outputs a reformatted version on the
+command line:
+
+```
+$ npx wide-json input.json > output.json
+
+$ npx wide-json --help
+
+Usage:
+  wide-json [options] filename.json > output.json
+  wide-json [options] < input.json > output.json
+
+Options:
+  --help       Show this help message.
+  --width=N    Set the target width of the output.
+               (default: 80)
+```
+
+## Using the Node Package
+
+```js
+const wideJSON = require('wide-json');
+
+console.log(wideJSON.stringify(myJSON));
+```
 
 ## Note about maximum line length
 
