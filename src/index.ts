@@ -20,6 +20,7 @@ class JSONContext {
   chunks: string[] = [];
   indentStack: number[] = [];
   measures: Map<JSONValue, MinMax> = new Map();
+  indents: number[] = [];
 
   constructor(width: number) {
     this.width = width;
@@ -49,9 +50,16 @@ class JSONContext {
   }
 
   newline(): void {
-    if (this.column === this.indent) {
+    if (this.column <= this.indent) {
       return;
     }
+
+    const lastChunk = this.chunks[this.chunks.length - 1];
+    if (lastChunk.endsWith(' ')) {
+      this.chunks.pop();
+      this.chunks.push(lastChunk.slice(0, -1));
+    }
+
     this.chunks.push('\n' + ' '.repeat(this.indent));
     this.column = this.indent;
   }
@@ -62,68 +70,60 @@ class JSONContext {
   }
 
   outputArray(a: JSONArray): void {
-    const [min, max] = this.measureArray(a);
+    const [min, max] = this.measure(a);
 
-    this.indent += 2;
-
-    if (this.column + min > this.width) {
-      this.emit('[');
-      this.newline();
-    } else {
-      this.emit('[ ');
+    if (a.length === 0) {
+      this.emit('[]');
+      return;
     }
+
+    this.emit('[ ');
+    this.indents.push(this.indent);
+    this.indent = this.column;
 
     for (let i = 0; i < a.length; i++) {
       const [min, max] = this.measure(a[i]);
-      const trailing = i === a.length - 1 ? ' ]' : ',';
+      const trailing = i === a.length - 1 ? ' ]' : ', ';
       if (this.column + min + trailing.length > this.width) {
         this.newline();
-      } else if (i > 0) {
-        this.emit(' ');
       }
 
       this.output(a[i]);
       this.emit(trailing);
     }
 
-    this.indent -= 2;
+    this.indent = this.indents.pop()!;
   }
 
-  outputMap(v: JSONMap): void {
-    const [min, max] = this.measureMap(v);
+  outputMap(m: JSONMap): void {
+    const entries = Object.entries(m);
 
-    this.indent += 2;
-
-    this.emit('{');
-
-    if (this.column + min > this.width) {
-      this.newline();
+    if (entries.length === 0) {
+      this.emit('{}');
+      return;
     }
 
-    const entries = Object.entries(v);
+    const [min, max] = this.measure(m);
+
+    this.emit('{ ');
+    this.indents.push(this.indent);
+    this.indent = this.column;
+
     for (let i = 0; i < entries.length; i++) {
       const [min, max] = this.measure(entries[i][1]);
-      const trailing = i === entries.length - 1 ? ' }' : ',';
+      const trailing = i === entries.length - 1 ? ' }' : ', ';
       const keyString = JSON.stringify(entries[i][0]) + ': ';
 
       if (this.column + keyString.length + min + trailing.length > this.width) {
         this.newline();
-      } else {
-        this.emit(' ');
       }
 
       this.emit(keyString);
-
-      // Values always start on same line as key
-      const indentSave = this.indent;
-      this.indent = this.column;
       this.output(entries[i][1]);
-      this.indent = indentSave;
-
       this.emit(trailing);
     }
 
-    this.indent -= 2;
+    this.indent = this.indents.pop()!;
   }
 
   json(): string {
@@ -156,6 +156,11 @@ class JSONContext {
   measureArray(a: JSONArray): MinMax {
     let min = 0;
     let max = 0;
+
+    if (a.length === 0) {
+      return [2, 2];
+    }
+
     for (let i = 0; i < a.length; i++) {
       // Space before is '[ ' or ', '
       let extra = 2;
@@ -176,6 +181,11 @@ class JSONContext {
     let min = 0;
     let max = 0;
     const entries = Object.entries(m);
+
+    if (entries.length === 0) {
+      return [2, 2];
+    }
+
     for (let i = 0; i < entries.length; i++) {
       // Space before is '{ ' or ', '
       let extra = 2;

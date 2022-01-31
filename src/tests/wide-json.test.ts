@@ -12,13 +12,14 @@ suite('wide-json', () => {
       [1.1, '1.1'],
       [true, 'true'],
       ["foo", '"foo"'],
+      [{}, '{}'],
+      [[], '[]'],
     ];
 
     for (const c of cases) {
       assert.equal(stringify(c[0]), c[1], "stringify(" + c[0] + ")");
     }
   });
-
 });
 
 async function sampleFiles() {
