@@ -1,6 +1,6 @@
 export { generateJSON, generateJSONLevel, nodeName };
 
-import { JSONMap } from '../index.js';
+import { JSONMap, JSONArray } from '../index.js';
 
 // Generate "random" JSON files that implement a tree of
 // nodes.  The tree is len(scheme) nodes high.  The
@@ -24,16 +24,32 @@ function generateJSON(scheme: number[]): string {
   return JSON.stringify(generateJSONLevel(0, pos, scheme), null, 2);
 }
 
-function generateJSONLevel(level: number, pos: number[], scheme: number[]) : JSONMap | string {
+function generateJSONLevel(level: number, pos: number[], scheme: number[]) : JSONMap | JSONArray | string {
   if(level === scheme.length) {
     return nodeName(level + 1, pos);
   }
-  const result: JSONMap = {};
+
+  let result: JSONMap | JSONArray;
+
+  const children = Math.abs(scheme[level]);
   const childPos = pos.slice();
-  for (let i = 0; i < scheme[level]; i++) {
-    childPos[level] = i;
-    result[nodeName(level + 1, childPos)] = generateJSONLevel(level + 1, childPos, scheme);
+
+  if (scheme[level] > 0) {
+    result = {};
+
+    for (let i = 0; i < children; i++) {
+      childPos[level] = i;
+      result[nodeName(level + 1, childPos)] = generateJSONLevel(level + 1, childPos, scheme);
+    }
+  } else {
+    result = [];
+
+    for (let i = 0; i < children; i++) {
+      childPos[level] = i;
+      result.push(generateJSONLevel(level + 1, childPos, scheme));
+    }
   }
+
   return result;
 }
 
