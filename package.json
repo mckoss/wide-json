@@ -1,6 +1,6 @@
 {
   "name": "wide-json",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "JSON formatter - preferring wide layout to tall layout",
   "main": "dist/index.js",
   "bin": "dist/cli.js",
