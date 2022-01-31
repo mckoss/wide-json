@@ -1,19 +1,14 @@
 #!/usr/bin/env node
 
-function deepMap(height=5, depth=5) {
-  const result = {};
+const gen = require('../dist/tests/json-generator.js');
+const wideJSON = require('../dist/index.js');
 
-  for (let i = 1; i <= height + 1; i++) {
-    let child = {};
-    result[`cell-${i}-1`] = child;
-    for (let j = 2; j < depth - 1; j++) {
-      const grandChild = {};
-      child[`cell-${i}-${j}`] = grandChild;
-      child = grandChild;
-    }
-    child[`cell-${i}-${depth - 1}`] = `cell-${i}-${depth}`;
-  }
-  return result;
+function main(args) {
+  const scheme = args.map(arg => parseInt(arg));
+  const json = JSON.parse(gen.generateJSON(scheme));
+  console.log(wideJSON.stringify(json));
 }
 
-console.log(JSON.stringify(deepMap(), null, 2));
+if (require.main === module) {
+  main(process.argv.slice(2));
+}

@@ -1,4 +1,4 @@
-export { stringify };
+export { stringify, JSONMap, JSONArray };
 
 type JSONValue = JSONPrimitive | JSONArray | JSONMap;
 type JSONPrimitive = boolean | number | string | null;
@@ -187,7 +187,6 @@ class JSONContext {
     }
 
     for (let i = 0; i < entries.length; i++) {
-      // Space before is '{ ' or ', '
       let extra = 2;
       if(i === entries.length - 1) {
         // Close object with ' }'

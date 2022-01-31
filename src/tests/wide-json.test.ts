@@ -33,7 +33,7 @@ async function sampleFiles() {
       }
 
       test(fileName, async () => {
-        const groups = fileName.match(/^(.*)-(\d+)\.json$/);
+        const groups = fileName.match(/^(.*)-w(\d+)\.json$/);
         let width = 80;
         if (groups !== null) {
           width = parseInt(groups[2]);
@@ -41,6 +41,8 @@ async function sampleFiles() {
         const json = await readFile("samples/" + fileName, "utf8");
         const parsed = JSON.parse(json);
         const s = stringify(parsed, width) + "\n";
+        const maxLine = maxLineLength(s);
+        // assert.isTrue(maxLine <= width, `maxLineLength(${fileName}) == ${maxLine} <= ${width}`);
         assert.equal(s, json, "stringify(" + fileName + ")");
       });
     }
@@ -48,3 +50,8 @@ async function sampleFiles() {
 }
 
 sampleFiles();
+
+function maxLineLength(s: string): number {
+  const lines = s.split('\n');
+  return lines.reduce((max, line) => Math.max(max, line.length), 0);
+}

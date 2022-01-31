@@ -1,0 +1,9 @@
+{ "a___": { "aa__": { "aaa_": "aaaa", "aab_": "aaba", "aac_": "aaca" },
+            "ab__": { "aba_": "abaa", "abb_": "abba", "abc_": "abca" },
+            "ac__": { "aca_": "acaa", "acb_": "acba", "acc_": "acca" } },
+  "b___": { "ba__": { "baa_": "baaa", "bab_": "baba", "bac_": "baca" },
+            "bb__": { "bba_": "bbaa", "bbb_": "bbba", "bbc_": "bbca" },
+            "bc__": { "bca_": "bcaa", "bcb_": "bcba", "bcc_": "bcca" } },
+  "c___": { "ca__": { "caa_": "caaa", "cab_": "caba", "cac_": "caca" },
+            "cb__": { "cba_": "cbaa", "cbb_": "cbba", "cbc_": "cbca" },
+            "cc__": { "cca_": "ccaa", "ccb_": "ccba", "ccc_": "ccca" } } }
