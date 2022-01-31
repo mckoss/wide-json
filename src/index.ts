@@ -84,7 +84,7 @@ class JSONContext {
     for (let i = 0; i < a.length; i++) {
       const [min, max] = this.measure(a[i]);
       const trailing = i === a.length - 1 ? ' ]' : ', ';
-      if (this.column + min + trailing.length > this.width) {
+      if (this.column + max + trailing.length > this.width) {
         this.newline();
       }
 
@@ -114,7 +114,7 @@ class JSONContext {
       const trailing = i === entries.length - 1 ? ' }' : ', ';
       const keyString = JSON.stringify(entries[i][0]) + ': ';
 
-      if (this.column + keyString.length + min + trailing.length > this.width) {
+      if (this.column + keyString.length + max + trailing.length > this.width) {
         this.newline();
       }
 
