@@ -4,6 +4,9 @@ Wide-JSON is a JSON formatter that prefers to format JSON
 objects more compactly by using as much available line width
 as possible.
 
+![ci badge](https://github.com/mckoss/wide-json/actions/workflows/node.js.yml/badge.svg)
+[![npm version](https://badge.fury.io/js/wide-json.svg)](https://badge.fury.io/js/wide-json)
+
 It defaults to a width of 80 columns but can be customized to any
 desired target width.
 
