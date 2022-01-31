@@ -6,6 +6,8 @@ const wideJSON = require('../dist/index.js');
 function main(args) {
   const scheme = args.map(arg => parseInt(arg));
   const json = JSON.parse(gen.generateJSON(scheme));
+  console.log(JSON.stringify(json, null, 2));
+  console.log('---');
   console.log(wideJSON.stringify(json));
 }
 
